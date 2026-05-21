@@ -51,7 +51,7 @@ class SpotType(Enum):
 class Vehicle:
     def __init__(self, vehicle_type: VehicleType):
         self.vehicle_type = vehicle_type
-        
+
 
 
 class ParkingSpot:
@@ -94,7 +94,7 @@ class ParkingLot:
 
         self.vehicles = {} #vehicle: parking
 
-    def parking_vehicle(self, vehicle: Vehicle) -> bool:
+    def parking_vehicle(self, vehicle: Vehicle) -> ParkingSpot:
         if vehicle.vehicle_type == VehicleType.BIKE:
             spot_priority = [self.small_spots, self.medium_spots, self.large_spots]
         elif vehicle.vehicle_type == VehicleType.CAR:
