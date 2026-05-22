@@ -52,8 +52,6 @@ class Vehicle:
     def __init__(self, vehicle_type: VehicleType):
         self.vehicle_type = vehicle_type
 
-
-
 class ParkingSpot:
     _id_counter = 0
 
