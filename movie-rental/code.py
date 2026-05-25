@@ -26,62 +26,43 @@ movie: shop idx, movie index and prices idx
 
 {movie i: {shop i: pricei}}
 '''
-from collections import defaultdict
+from sortedcontainers import SortedList
 
 class MovieRentingCompany:
 
-    def __init__(self, entries:list):
-        self.store_record = {}  
+    def __init__(self, entries: list):
+        self.store_record = {}          # {movie: {shop: price}}
+        self.available = {}             # {movie: SortedList[(price, shop)]}
+        self.rented = SortedList()      # [(price, shop, movie)]
 
-        for i in entries:
-            shop,movie,price = i
+        for shop, movie, price in entries:
             if movie not in self.store_record:
                 self.store_record[movie] = {}
+                self.available[movie] = SortedList()
             self.store_record[movie][shop] = price
-
-        self.report_num = 5
-
-        self.rented = set()  # {(price, shop, movie)}
+            self.available[movie].add((price, shop))
 
     def search(self, movie: int) -> list:
-        if movie not in self.store_record:
+        if movie not in self.available:
             return []
-        available = []
-        for shop, price in self.store_record[movie].items():
-            if (price, shop, movie) not in self.rented:
-                available.append((price, shop))
-        available.sort()
-        return [shop for price, shop in available[:5]]
+        return [shop for price, shop in self.available[movie][:5]]
 
-
-    def rent(self,shop:int, movie:int)->None:
-        if movie not in self.store_record:
-            return None
-        
-        if shop not in self.store_record[movie]:
-            return None
-        
-        price = self.store_record[movie][shop]
-        if (price, shop, movie) in self.rented:
+    def rent(self, shop: int, movie: int) -> None:
+        if movie not in self.store_record or shop not in self.store_record[movie]:
             return
+        price = self.store_record[movie][shop]
+        self.available[movie].remove((price, shop))
         self.rented.add((price, shop, movie))
 
-    def drop(self,shop:int, movie:int)->None:
-        if movie not in self.store_record:
-            return None
-        
-        if shop not in self.store_record[movie]:
-            return None
-        
-        price = self.store_record[movie][shop]
-        if (price, shop, movie) not in self.rented:
+    def drop(self, shop: int, movie: int) -> None:
+        if movie not in self.store_record or shop not in self.store_record[movie]:
             return
+        price = self.store_record[movie][shop]
         self.rented.remove((price, shop, movie))
+        self.available[movie].add((price, shop))
 
-
-    def report(self)->list:
-        sorted_rented = sorted(self.rented)
-        return [[shop, movie] for price, shop, movie in sorted_rented[:5]]
+    def report(self) -> list:
+        return [[shop, movie] for price, shop, movie in self.rented[:5]]
 
 
 if __name__ == "__main__":
