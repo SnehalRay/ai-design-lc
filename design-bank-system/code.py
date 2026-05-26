@@ -134,6 +134,7 @@ class BankSystem:
     def transaction(self, sender_name: str, sender_ph: int, sender_account_type: str,
                     receiver_name: str, receiver_ph: int, receiver_account_type: str,
                     amount: float) -> bool:
+        
         if amount <= 0:
             raise ValueError("Transaction amount must be positive")
         sender_key = (sender_name, sender_ph, sender_account_type)
@@ -148,6 +149,7 @@ class BankSystem:
         receiver = self.accounts[receiver_key]
         if sender.balance - amount < sender.min_balance:
             raise ValueError("Insufficient funds")
+        
         sender.balance = sender.balance - amount
         receiver.balance = receiver.balance + amount
         tx_id, ts = str(uuid.uuid4()), datetime.now()
