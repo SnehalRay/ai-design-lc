@@ -114,6 +114,7 @@ class Event:
         self.__subscribers = {} #
         self.dlq = [] 
 
+
     def subscribe_to_event(self, user: User):
         self.__subscribers[id(user)] = user
 
