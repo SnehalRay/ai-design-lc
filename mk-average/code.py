@@ -99,8 +99,8 @@ if __name__ == "__main__":
     obj.addElement(1)
     obj.addElement(12)
     print(obj.calculateMKAverage())  # window=[3,1,12], drop 1 and 12 → 3
-    obj.addElement(5)
-    obj.addElement(3)
+    obj.addElement(5) 
+    obj.addElement(3) 
     print(obj.calculateMKAverage())  # window=[12,5,3], drop 3 and 12 → 5
     obj.addElement(4)
     print(obj.calculateMKAverage())  # window=[5,3,4], drop 3 and 5 → 4
